@@ -20,14 +20,14 @@ ft_strcmp:
 	xor rcx, rcx
 	xor rax, rax
 .loop:
-	mov bl, byte [rdi + rcx]
-	test bl, bl
+	mov dl, byte [rdi + rcx]
+	test dl, dl
 	jz .end
 
-	mov bh, byte [rsi + rcx]
-	sub bl, bh
-	mov al, bl
-	cmp bl, 0
+	mov dh, byte [rsi + rcx]
+	sub dl, dh
+	mov al, dl
+	cmp dl, 0
 	jnz .end
 
 	inc rcx

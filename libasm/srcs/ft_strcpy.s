@@ -17,9 +17,9 @@ ft_strcpy:
 	xor rcx, rcx
 	mov rax, rdi
 .loop:
-	mov bl, byte [rsi + rcx]
-	mov byte [rdi + rcx], bl
+	mov dl, byte [rsi + rcx]
+	mov byte [rdi + rcx], dl
 	inc rcx
-	test bl, bl
+	test dl, dl
 	jnz .loop
 	ret
