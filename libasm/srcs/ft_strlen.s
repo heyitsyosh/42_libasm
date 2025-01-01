@@ -15,8 +15,8 @@ section .text
 ft_strlen:
 	xor rax, rax
 .loop:
-	mov bl, byte [rdi + rax]
-	test bl, bl
+	mov dl, byte [rdi + rax]
+	test dl, dl
 	jz .end
 	inc rax
 	jmp .loop
