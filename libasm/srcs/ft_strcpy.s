@@ -1,17 +1,25 @@
 global ft_strcpy
 
 section .text
-; Parameters
-; 	(dest = rdi, src = rsi)
-; Return
-; 	rax: pointer to dest
+; C Prototype:
+;    char *strcpy(char *dest, const char *src);
+;
+; Description:
+;    Copies a string from source to destination.
+;
+; Parameters:
+;    rdi: Pointer to destination buffer (dest)
+;    rsi: Pointer to source string (src)
+;
+; Return:
+;    rax: Pointer to destination
 ft_strcpy:
 	xor rcx, rcx
 	mov rax, rdi
-.loop
+.loop:
 	mov bl, byte [rsi + rcx]
 	mov byte [rdi + rcx], bl
 	inc rcx
 	test bl, bl
-	jne .loop
+	jnz .loop
 	ret
