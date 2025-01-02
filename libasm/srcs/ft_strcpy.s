@@ -14,7 +14,7 @@ section .text
 ; Return:
 ;    rax: Pointer to destination
 ft_strcpy:
-	xor rcx, rcx
+	xor ecx, ecx
 	mov rax, rdi
 .loop:
 	mov dl, byte [rsi + rcx]

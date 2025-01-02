@@ -13,7 +13,7 @@ section .text
 ; Return:
 ;    rax: Number of bytes in string
 ft_strlen:
-	xor rax, rax
+	xor eax, eax
 .loop:
 	mov dl, byte [rdi + rax]
 	test dl, dl

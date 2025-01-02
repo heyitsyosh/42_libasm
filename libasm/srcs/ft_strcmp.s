@@ -17,8 +17,8 @@ section .text
 ;      <0  if s1 < s2
 ;      >0  if s1 > s2
 ft_strcmp:
-	xor rcx, rcx
-	xor rax, rax
+	xor ecx, ecx
+	xor eax, eax
 .loop:
 	mov dl, byte [rdi + rcx]
 	test dl, dl
