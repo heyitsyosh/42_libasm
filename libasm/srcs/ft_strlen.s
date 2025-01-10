@@ -5,13 +5,13 @@ section .text
 ;    size_t strlen(const char *s);
 ;
 ; Description:
-;     Calculates the length of a string.
+;    Calculates the length of a string.
 ;
 ; Parameters:
-;    rdi: Pointer to string (s)
+;    rdi: Pointer to the input string
 ;
 ; Return:
-;    rax: Number of bytes in string
+;    rax: Number of bytes in the string
 ft_strlen:
 	xor eax, eax
 .loop:

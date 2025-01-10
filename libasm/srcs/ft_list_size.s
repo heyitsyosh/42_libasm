@@ -10,10 +10,10 @@ section .text
 ;    Counts the number of nodes in a linked list.
 ;
 ; Parameters:
-;    rdi: Pointer to the first node of linked list
+;    rdi: Pointer to the first node of the linked list
 ;
 ; Return value:
-;    rax: The number of nodes in the linked list
+;    rax: Number of nodes in the linked list
 ft_list_size:
 	xor eax, eax
 .loop:

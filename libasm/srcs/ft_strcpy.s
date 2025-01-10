@@ -8,11 +8,11 @@ section .text
 ;    Copies a string from source to destination.
 ;
 ; Parameters:
-;    rdi: Pointer to destination buffer (dest)
-;    rsi: Pointer to source string (src)
+;    rdi: Pointer to the destination buffer (dest)
+;    rsi: Pointer to the source string (src)
 ;
 ; Return:
-;    rax: Pointer to destination
+;    rax: Pointer to the destination string
 ft_strcpy:
 	xor ecx, ecx
 	mov rax, rdi
