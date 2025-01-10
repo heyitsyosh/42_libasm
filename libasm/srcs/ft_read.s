@@ -11,7 +11,7 @@ section .text
 ;
 ; Parameters:
 ;    rdi: File descriptor to read from
-;    rsi: Pointer to buffer
+;    rsi: Pointer to the buffer to read into
 ;    rdx: Number of bytes to read
 ;
 ; Return value:
