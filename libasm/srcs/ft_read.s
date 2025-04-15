@@ -1,6 +1,6 @@
 global ft_read
 
-extern errno_location
+extern __errno_location
 
 section .text
 ; C Prototype:
@@ -25,7 +25,7 @@ ft_read:
 .error_handle:
 	neg rax
 	mov rdi, rax
-	call errno_location wrt ..plt
+	call __errno_location wrt ..plt
 	mov [ rax ], rdi
 	mov rax, -1
 	ret
