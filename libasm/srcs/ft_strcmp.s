@@ -18,19 +18,22 @@ section .text
 ;      >0  if s1 > s2
 ft_strcmp:
 	xor ecx, ecx
-	xor eax, eax
 .loop:
-	mov dl, byte [rdi + rcx]
-	test dl, dl
+	mov al, byte [rdi + rcx]
+	mov dl, byte [rsi + rcx]
+	cmp al, dl
+	jne .diff
+	test al, al
 	jz .end
-
-	mov dh, byte [rsi + rcx]
-	sub dl, dh
-	mov al, dl
-	cmp dl, 0
-	jnz .end
-
 	inc rcx
 	jmp .loop
+
+.diff:
+	movzx eax, al
+	movzx edx, dl
+	sub eax, edx
+    ret
+
 .end:
+	xor eax, eax
 	ret

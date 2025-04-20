@@ -19,13 +19,14 @@ section .text
 ft_write:
 	mov rax, 1
 	syscall
-	jz .error_handle
+	cmp rax, 0
+	jl .error_handle
 	ret
 
 .error_handle:
 	neg rax
 	mov rdi, rax
 	call __errno_location wrt ..plt
-	mov [ rax ], rdi
+	mov [rax], rdi
 	mov rax, -1
 	ret

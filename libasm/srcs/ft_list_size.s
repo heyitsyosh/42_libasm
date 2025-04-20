@@ -20,7 +20,7 @@ ft_list_size:
 	test rdi, rdi
 	jz .end
 	inc rax
-	mov rdi, [ rdi + t_list.next ]
+	mov rdi, [rdi + t_list.next]
 	jmp .loop
 .end:
 	ret

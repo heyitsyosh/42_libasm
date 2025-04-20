@@ -19,7 +19,6 @@ TEST_FILES = main
 
 OBJS = $(foreach src, $(FILES), $(OBJS_DIR)/$(src).o)
 TEST_OBJS = $(foreach src, $(TEST_FILES), $(OBJS_DIR)/$(src).o)
-# compile test objs into what?
 
 INCLUDES = -I ./includes/
 
@@ -27,13 +26,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 # -g3 -fsanitize=address
 
-ifeq ($(shell uname -m), arm64)
-CC += -ld_classic --target=x86_64-apple-darwin
-ASMFLAGS = -f macho64 -DMACOS
-# ld -macosx_version_min 10.8 -lSystem
-else
-ASMFLAGS = -f elf64 -DLINUX
-endif
+ASMFLAGS = -f elf64
 
 #--------------------------------------------------------------------------#
 
@@ -53,7 +46,6 @@ $(NAME): $(OBJS)
 
 test: $(NAME) $(TEST_OBJS)
 	$(CC) $(CFLAGS) $(TEST_OBJS) $(NAME) -o test_exec
-# -L. -lasm
 
 clean:
 	rm -rf $(OBJS_DIR)

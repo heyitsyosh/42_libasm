@@ -24,6 +24,7 @@ ft_strdup:
 	inc rax
 	mov rdi, rax
 	call malloc wrt ..plt
+	test rax, rax
 	jz .error_handle
 
 	pop rsi
@@ -36,6 +37,6 @@ ft_strdup:
 	neg rax
 	mov rdi, rax
 	call __errno_location wrt ..plt
-	mov [ rax ], rdi
-	mov rax, -1
+	mov [rax], rdi
+	xor eax, eax
 	ret
