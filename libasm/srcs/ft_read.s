@@ -17,15 +17,16 @@ section .text
 ; Return value:
 ;    rax: Number of bytes read (>= 0), or -1 on error
 ft_read:
-	mov rax, 0
+	xor eax, eax
 	syscall
-	jz .error_handle
+	cmp rax, 0
+	jl .error_handle
 	ret
 
 .error_handle:
 	neg rax
 	mov rdi, rax
 	call __errno_location wrt ..plt
-	mov [ rax ], rdi
+	mov [rax], rdi
 	mov rax, -1
 	ret
