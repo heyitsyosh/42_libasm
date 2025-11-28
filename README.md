@@ -5,12 +5,12 @@
 *<p align="center">The aim of this project is to get familiar with assembly language.</p>*
 
 ## Description:
-Implementation of some functions from C standard library in `x86_64 assembly` code.
-(Some non-standard utility functions are included as well.)
+Implementation of several C standard library functions in `x86_64 assembly`.
+Some non-standard utility functions are also included.
 
 ## Requirements:
-This code is written in x86_64 assembly uusing Intel syntax. for nasm compilation.
-Although it is written for Linux, there is a macro file with MacOS compilation in consideration.
+This project is written in x86_64 assembly using Intel syntax for NASM compilation.
+Although the code is written for Linux, a macro file is included to support macOS compilation as well.
 
 ## Set-up:
 First, enter directory with `cd libasm`.
