@@ -9,30 +9,29 @@ Implementation of several C standard library functions in `x86_64 assembly`.
 Some non-standard utility functions are also included.
 
 ## Requirements:
-This project is written in x86_64 assembly using Intel syntax for NASM compilation.  
-Although the code is written for Linux, a macro file is included to support macOS compilation as well.
+This project targets **Linux on x86_64**.
+All assembly code is written in **Intel syntax** and assembled with **NASM**.
 
 ## Set-up:
-First, enter directory with `cd libasm`.
+First, enter directory with `cd libasm`.  
 Then use any Makefile command.
 
 #### Makefile Commands:
 ```Java
-make        //compile executable (./so_long)
+make        //compile library (to libasm.a)
 make test   //
 make clean  //delete .o
-make fclean //delete .o and executable
-make re     //delete .o and executable, recompile 
+make fclean //delete .o and .a
+make re     //delete .o and .a and recompile library
 ```
 
 ## Usage:  
-To use in projects, compile with `-L<path/to/directory/with/libft.a> -lft`.  
-Alternatively, compile project files with `path/to/libft.a`.  
-Make sure to include `libft.h` appropriately in your source code.
+To use in projects, compile with `-L<path/to/directory/with/libasm.a> -lasm`.  
+Alternatively, compile project files with `path/to/libasm.a`.  
 #### Compilation Examples:
 ```Makefile
-gcc main.c -L./libft/ -lft
-gcc main.c ./libft/libft.a
+gcc main.c -L./libasm -lasm
+gcc main.c ./libasm/libasm.a
 ```
 
 ## Overview:
