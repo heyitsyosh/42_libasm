@@ -9,7 +9,7 @@ Implementation of several C standard library functions in `x86_64 assembly`.
 Some non-standard utility functions are also included.
 
 ## Requirements:
-This project targets **Linux on x86_64**.
+This project targets **Linux on x86_64**.  
 All assembly code is written in **Intel syntax** and assembled with **NASM**.
 
 ## Set-up:
