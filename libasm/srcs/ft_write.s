@@ -25,7 +25,7 @@ ft_write:
 
 .error_handle:
 	neg rax
-	push rax	; save errno in stack and align stack to 16-byte
+	push rax	; Save errno in stack and align stack to 16-byte
 	call __errno_location wrt ..plt
 	pop rdi
 	mov [rax], edi
