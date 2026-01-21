@@ -19,24 +19,22 @@ section .text
 ;    rax: Pointer to the newly allocated duplicate string
 ;         (NULL if memory allocation fails)
 ft_strdup:
+	push rdi		; Save s in stack and align stack to 16-byte
 	call ft_strlen
-	push rdi
-	inc rax
+	inc rax			; Increment len to allocate '\0'
+
 	mov rdi, rax
 	call malloc wrt ..plt
 	test rax, rax
 	jz .error_handle
 
-	pop rsi
-	mov rdi, rax
-	call ft_strcpy
+	mov rdi, rax	; Set dest
+	mov rsi, [rsp]	; Set src
+	call ft_strcpy	; ft_strlcpy(dest, src)
+	add rsp, 8		; Discard pushed s
 	ret
 
 .error_handle:
-	pop rdi
-	neg rax
-	mov rdi, rax
-	call __errno_location wrt ..plt
-	mov [rax], rdi
+	add rsp, 8		; Discard pushed s
 	xor eax, eax
 	ret
