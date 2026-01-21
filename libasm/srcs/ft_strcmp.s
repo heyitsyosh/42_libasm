@@ -27,7 +27,6 @@ ft_strcmp:
 	jz .end
 	inc rcx
 	jmp .loop
-
 .diff:
 	movzx eax, al
 	movzx edx, dl
