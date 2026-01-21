@@ -22,4 +22,19 @@ section .text
 ; Return value:
 ;    None.
 ft_list_push_front:
-	;
+	push rdi
+	push rsi
+	sub rsp, 8	; align stack to 16-byte
+	mov rdi, t_list_size
+	call malloc wrt ..plt
+	add rsp, 8
+	test rax, rax
+	pop rsi
+	pop rdi
+	jz .end
+	mov [rax + t_list.data], rsi
+	mov rdx, [rdi]
+	mov [rax + t_list.next], rdx
+	mov [rdi], rax
+.end:
+	ret
