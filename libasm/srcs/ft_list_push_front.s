@@ -22,6 +22,9 @@ section .text
 ; Return value:
 ;    None.
 ft_list_push_front:
+	test rdi, rdi
+	jz .end					; Null guard
+
 	push rdi
 	push rsi
 	sub rsp, 8				; Align stack to 16-byte
