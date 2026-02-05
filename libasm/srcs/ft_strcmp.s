@@ -17,21 +17,19 @@ section .text
 ;      <0  if s1 < s2
 ;      >0  if s1 > s2
 ft_strcmp:
-	xor ecx, ecx
 .loop:
-	mov al, byte [rdi + rcx]
-	mov dl, byte [rsi + rcx]
+	movzx eax, byte [rdi]
+	movzx edx, byte [rsi]
 	cmp al, dl
 	jne .diff
 	test al, al
 	jz .end
-	inc rcx
+	inc rdi
+	inc rsi
 	jmp .loop
 .diff:
-	movzx eax, al
-	movzx edx, dl
 	sub eax, edx
-    ret
+	ret
 
 .end:
 	xor eax, eax
