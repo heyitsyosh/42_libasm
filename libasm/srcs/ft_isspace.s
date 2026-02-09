@@ -13,17 +13,17 @@ section .text
 ; Return value:
 ;    rax: Non-zero if the character is a whitespace character, 0 otherwise.
 ft_isspace:
-	mov dl, byte [rax]
+	mov al, byte [rax]
 
-	cmp dl, ' '
+	cmp al, ' '
 	je .true
-	cmp dl, 9
+	cmp al, 9
 	jb .false
-	cmp dl, 13
+	cmp al, 13
 	jbe .true
-.true:
-	mov eax, 1
-	ret
 .false:
 	xor eax, eax
+	ret
+.true:
+	mov eax, 1
 	ret
