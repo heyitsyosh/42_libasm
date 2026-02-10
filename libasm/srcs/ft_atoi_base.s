@@ -6,7 +6,9 @@ section .text
 ;
 ; Description:
 ;    Converts the input string to an integer in the specified base.
-;    (Leading whitespaces and optional signs in the input are handled.)
+;    Ignores leading whitespace, determines the sign from consecutive
+;    '+' and '-' characters, and converts until the first character not
+;    in the base.
 ;
 ;    Base Validation Rules:
 ;    - The base must contain at least 2 characters.
@@ -25,9 +27,10 @@ ft_atoi_base:
 	jz .error_end		; Null guard base string
 	test rsi, rsi
 	jz .error_end		; Null guard base string
-	xor eax, eax
-.validate_base:
-	mov dl, byte [rsi + rax]
+	xor r8d, r8d		; i = 0
+
+.validate_base_loop:
+	mov dl, byte [rsi + r8]
 	test dl, dl
 	jz .validate_length
 	
@@ -37,43 +40,73 @@ ft_atoi_base:
 	je .error_end
 
 	cmp dl, ' '
-	je .error_end
+	je .error_end		; Whitespace found in base
 	cmp dl, 9
 	jb .check_for_duplicates
 	cmp dl, 13
 	jbe .error_end		; Whitespace found in base
 .check_for_duplicates:	; Compare current base character against all following characters
-	mov ecx, eax		; Copy base character index (eax) to inner loop index
+	mov ecx, r8d		; j = i
 .check_for_duplicates_loop:
-	inc ecx
-	mov r8b, byte [rsi + rcx]
-	test r8b, r8b
-	jz .no_duplicate_found
+	inc ecx				; j++
+	mov r9b, byte [rsi + rcx]
+	test r9b, r9b
+	jz .increment_base_index	; No duplicates found, continue validation
 
-	cmp dl, r8b
+	cmp r9b, dl
 	je .error_end		; Duplicate found in base
-
 	jmp .check_for_duplicates_loop
-.no_duplicate_found:
-	inc eax
-	jmp .validate_base
+.increment_base_index:
+	inc r8d				; i++
+	jmp .validate_base_loop
 .validate_length:
-	cmp eax, 2
-	jb .error_end		; Ensure that base is more than 1 character
-	.atoi
-.atoi:
+	cmp r8d, 2
+	jb .error_end		; Ensure that base_len >= 2
+
+; Parse and convert input string
+	xor eax, eax		; Initialize return value to 0
+	mov r9d, 1			; Initialize sign to 1 (positive)
+						; r8d = base_len
+.skip_spaces:
+	mov dl, byte [rdi]
+
+	cmp dl, ' '
+	je .skip_spaces_loop
+	cmp dl, 9
+	jb .set_sign
+	cmp dl, 13
+	ja .set_sign
+	inc rdi
+	jmp .skip_spaces
+.set_sign:
+	mov dl, byte [rdi]
+
+	cmp dl, '+'
+	je .set_sign_loop
+	cmp dl, '-'
+	jne .convert
+
+	neg r9d
+.set_sign_loop:
+	inc rdi
+	jmp .parse_sign
+.convert:
+	mov dl, byte [rdi]
+	test dl, dl
+	jz .apply_sign
+
+	; get current_digit
+
+	mul eax, r8d
+	add eax, current_digit
+	inc rdi
+	jmp .convert
+.apply_sign:
+	cmp r9d, 0
+	jge .end
+	neg rax
+.end:
+	ret
 .error_end:
 	xor eax, eax
 	ret
-
-; https://github.com/heyitsyosh/42_c_piscine/blob/main/submissions/CPC04/ex05/ft_atoi_base.c
-; ft_atoi_base
-• Write a function that converts the initial portion of the string pointed to by str
-into an integer representation.
-• str is in a specific base, given as a second parameter.
-• Except for the base rule, the function should behave exactly like ft_atoi.
-• If an invalid argument is provided, the function should return 0.
-Examples of invalid arguments:
-◦ The base is empty or has only one character.
-◦ The base contains duplicate characters.
-◦ The base contains +, -, or whitespace characters.
