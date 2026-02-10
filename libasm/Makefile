@@ -1,5 +1,5 @@
 NAME        = libasm.a
-TEST        = tester
+TEST        = libasm-tester
 
 SRCS_DIR    = srcs
 TESTS_DIR   = tests
