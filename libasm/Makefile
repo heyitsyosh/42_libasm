@@ -1,10 +1,17 @@
-NAME = libasm.a
+NAME        = libasm.a
+TEST        = tester
 
-SRCS_DIR = srcs
-OBJS_DIR = objs
-TESTS_DIR = tests
+SRCS_DIR    = srcs
+TESTS_DIR   = tests
+OBJS_DIR    = objs
 
-FILES = ft_strlen\
+CC          = gcc
+CFLAGS      = -Wall -Wextra -Werror
+NASM        = nasm
+NASMFLAGS   = -f elf64
+INCLUDES    = -I ./includes/
+
+SRCS =	ft_strlen\
 		ft_strcpy\
 		ft_strcmp\
 		ft_read\
@@ -12,46 +19,54 @@ FILES = ft_strlen\
 		ft_strdup\
 		ft_atoi_base\
 		ft_list_push_front\
-		ft_list_size\
-		ft_list_sort\
-		ft_list_remove_if
-TEST_FILES = main
+		ft_list_size
+# 		ft_list_sort\
+# 		ft_list_remove_if
 
-OBJS = $(foreach src, $(FILES), $(OBJS_DIR)/$(src).o)
-TEST_OBJS = $(foreach src, $(TEST_FILES), $(OBJS_DIR)/$(src).o)
+TEST_SRCS = tester stdlib_tester atoi_tester lst_tester
 
-INCLUDES = -I ./includes/
+OBJS = $(addprefix $(OBJS_DIR)/, $(addsuffix .o,$(SRCS)))
+TEST_OBJS = $(addprefix $(OBJS_DIR)/, $(addsuffix .o,$(TEST_SRCS)))
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-# -g3 -fsanitize=address
+# ----------------- Formatting ------------------
 
-ASMFLAGS = -f elf64
+OK     = \033[32m✓\033[0m
+DEL    = \033[31m✗\033[0m
 
-#--------------------------------------------------------------------------#
-
+# ------------------- Rules --------------------
 all: $(NAME)
 
 $(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)
-
-$(OBJS_DIR)/%.o: $(TESTS_DIR)/%.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.s | $(OBJS_DIR)
-	nasm $(ASMFLAGS) $(INCLUDES) $< -o $@
+	@$(NASM) $(NASMFLAGS) $(INCLUDES) $< -o $@
+	@echo "$(OK) nasm  $<"
+
+$(OBJS_DIR)/%.o: $(TESTS_DIR)/%.c | $(OBJS_DIR)
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@echo "$(OK) $(CC)   $<"
 
 $(NAME): $(OBJS)
-	ar rcs $@ $^
+	@ar rcs $(NAME) $(OBJS)
+	@echo "$(OK) ar    $(NAME)"
 
-test: $(NAME) $(TEST_OBJS)
-	$(CC) $(CFLAGS) $(TEST_OBJS) $(NAME) -o test_exec
+bonus: all
+
+test: $(TEST)
+
+$(TEST): $(NAME) $(TEST_OBJS)
+	@$(CC) $(CFLAGS) $(TEST_OBJS) $(NAME) -o $(TEST)
+	@echo "$(OK) $(CC)   $(TEST)"
 
 clean:
-	rm -rf $(OBJS_DIR)
+	@$(RM) -r $(OBJS_DIR)
+	@echo "$(DEL) $(RM) $(OBJS_DIR) deleted"
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME) $(TEST)
+	@echo "$(DEL) $(RM) $(NAME) deleted"
+	@echo "$(DEL) $(RM) tests deleted"
 
 re: fclean all
 
