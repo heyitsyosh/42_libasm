@@ -1,4 +1,5 @@
-#include <stdio.h>		// printf
+#include "libasm.h"
+#include "tester.h"
 #include <string.h>		// strlen, strcpy, strcmp, strdup, memcmp
 #include <unistd.h>		// read, write, lseek, close
 #include <stdlib.h>		// free
@@ -7,23 +8,7 @@
 #include <sys/stat.h>	// O_CREAT, 0644 (mode flags)
 #include <errno.h>		// errno
 
-#define BLUE "\033[34m"
-#define GREEN "\033[32m"
-#define RED "\033[31m"
-#define GREY "\033[90m"
-#define RESET "\033[0m"
-
-#define PASS_TAG GREEN "[PASS]" RESET
-#define FAIL_TAG RED "[FAIL]" RESET
-
-extern int	ft_strlen(const char *str);
-extern char	*ft_strcpy(char *dest, const char *src);
-extern int	ft_strcmp(const char *s1, const char *s2);
-extern ssize_t	ft_write(int fd, const void *buf, size_t count);
-extern ssize_t	ft_read(int fd, void *buf, size_t count);
-extern char	*ft_strdup(const char *s);
-
-//--------------------------------------------------------------------------//
+/* ── test macros ──────────────────────────────────────────────── */
 
 #define TEST_INT(func, original, input) do { \
 	int expected = original(input); \
@@ -31,7 +16,7 @@ extern char	*ft_strdup(const char *s);
 	if (expected != result) \
 		printf("%s (\"%s\") Expected: %d, Got: %d\n", FAIL_TAG, input, expected, result); \
 	else \
-		printf("%s (\"%s\") " GREY "Result: %d" RESET "\n", \
+		printf("%s (\"%s\") " GRAY "Result: %d" RESET "\n", \
 			PASS_TAG, input, result); \
 } while (0)
 
@@ -43,7 +28,7 @@ extern char	*ft_strdup(const char *s);
 	if (strcmp(expected, result) != 0) \
 		printf("%s (\"%s\") Expected: \"%s\", Got: \"%s\"\n", FAIL_TAG, src, expected, result); \
 	else \
-		printf("%s (\"%s\") " GREY "Result: \"%s\"" RESET "\n", \
+		printf("%s (\"%s\") " GRAY "Result: \"%s\"" RESET "\n", \
 			PASS_TAG, src, result); \
 } while (0)
 
@@ -56,7 +41,7 @@ extern char	*ft_strdup(const char *s);
 			expected ? expected : "(null)", \
 			result ? result : "(null)"); \
 	else \
-		printf("%s (\"%s\") " GREY "Result: \"%s\"" RESET "\n", \
+		printf("%s (\"%s\") " GRAY "Result: \"%s\"" RESET "\n", \
 			PASS_TAG, input, result); \
 	free(expected); \
 	free(result); \
@@ -71,7 +56,7 @@ extern char	*ft_strdup(const char *s);
 		printf("%s (\"%s\", \"%s\") Expected: %d, Got: %d\n", \
 			FAIL_TAG, s1, s2, expected, result); \
 	else \
-		printf("%s (\"%s\", \"%s\") " GREY "Result: %d" RESET "\n", \
+		printf("%s (\"%s\", \"%s\") " GRAY "Result: %d" RESET "\n", \
 			PASS_TAG, s1, s2, result); \
 } while (0)
 
@@ -91,7 +76,7 @@ extern char	*ft_strdup(const char *s);
 		printf("%s (fd) Expected errno %d, Got errno %d\n", \
 			FAIL_TAG, expected_errno, result_errno); \
 	else \
-		printf("%s (fd) " GREY "Result: %zd bytes" RESET "\n", \
+		printf("%s (fd) " GRAY "Result: %zd bytes" RESET "\n", \
 			PASS_TAG, result_bytes); \
 } while (0)
 
@@ -104,15 +89,15 @@ extern char	*ft_strdup(const char *s);
 		printf("%s %s(fd) Expected %zd bytes, Got %zd bytes\n", \
 			FAIL_TAG, #func, expected_bytes, result_bytes); \
 	else \
-		printf("%s %s(fd) " GREY "Result: %zd bytes" RESET "\n", \
+		printf("%s %s(fd) " GRAY "Result: %zd bytes" RESET "\n", \
 			PASS_TAG, #func, result_bytes); \
 } while (0)
 
-//--------------------------------------------------------------------------//
+/* ── tests ────────────────────────────────────────────────────── */
 
 static void	test_strlen(void)
 {
-	printf("\n=== ft_strlen ===\n");
+	printf("\n--- ft_strlen ---\n");
 	TEST_INT(ft_strlen, strlen, "hello world");
 	TEST_INT(ft_strlen, strlen, "");
 	TEST_INT(ft_strlen, strlen, "a");
@@ -121,7 +106,7 @@ static void	test_strlen(void)
 
 static void	test_strcpy(void)
 {
-	printf("\n=== ft_strcpy ===\n");
+	printf("\n--- ft_strcpy ---\n");
 	TEST_STRCPY(ft_strcpy, strcpy, "hello world");
 	TEST_STRCPY(ft_strcpy, strcpy, "");
 	TEST_STRCPY(ft_strcpy, strcpy, "1234567890");
@@ -130,7 +115,7 @@ static void	test_strcpy(void)
 
 static void	test_strcmp(void)
 {
-	printf("\n=== ft_strcmp ===\n");
+	printf("\n--- ft_strcmp ---\n");
 	TEST_STR_CMP(ft_strcmp, strcmp, "abc", "abc");
 	TEST_STR_CMP(ft_strcmp, strcmp, "abc", "abd");
 	TEST_STR_CMP(ft_strcmp, strcmp, "abc", "ab");
@@ -140,7 +125,7 @@ static void	test_strcmp(void)
 
 static void	test_read(void)
 {
-	printf("\n=== ft_read ===\n");
+	printf("\n--- ft_read ---\n");
 	int fd = open("testfile.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		return (perror("open"));
@@ -153,7 +138,7 @@ static void	test_read(void)
 
 static void	test_write(void)
 {
-	printf("\n=== ft_write ===\n");
+	printf("\n--- ft_write ---\n");
 	int fd = open("testfile.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		return (perror("open"));
@@ -165,20 +150,19 @@ static void	test_write(void)
 
 static void	test_strdup(void)
 {
-	printf("\n=== ft_strdup ===\n");
+	printf("\n--- ft_strdup ---\n");
 	TEST_STR(ft_strdup, strdup, "duplicate me!");
 	TEST_STR(ft_strdup, strdup, "");
 	TEST_STR(ft_strdup, strdup, "1234567890");
 }
 
-//--------------------------------------------------------------------------//
+/* ── entry point ──────────────────────────────────────────────── */
 
 void	run_stdlib_tests(void)
 {
 	printf("========================================\n");
 	printf("           STDLIB TESTS                 \n");
 	printf("========================================\n");
-	printf("FORMAT: [result] (input) -> output\n");
 
 	test_strlen();
 	test_strcpy();
@@ -186,4 +170,6 @@ void	run_stdlib_tests(void)
 	test_read();
 	test_write();
 	test_strdup();
+
+	printf("\n\n");
 }
