@@ -1,15 +1,18 @@
-NAME        = libasm.a
-TEST        = libasm-tester
+NAME = libasm.a
+TEST = libasm-tester
 
-SRCS_DIR    = srcs
-TESTS_DIR   = tests
-OBJS_DIR    = objs
+SRCS_DIR = srcs
+TESTS_DIR = tests
+OBJS_DIR = objs
 
-CC          = gcc
-CFLAGS      = -Wall -Wextra -Werror
-NASM        = nasm
-NASMFLAGS   = -f elf64
-INCLUDES    = -I ./includes/
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+
+NASM = nasm
+NASMFLAGS = -f elf64
+
+INCLUDES = -I ./includes/
+NASM_INCLUDES = -I ./srcs
 
 SRCS =	ft_strlen\
 		ft_strcpy\
@@ -40,7 +43,7 @@ $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.s | $(OBJS_DIR)
-	@$(NASM) $(NASMFLAGS) $(INCLUDES) $< -o $@
+	@$(NASM) $(NASMFLAGS) $(NASM_INCLUDES) $< -o $@
 	@echo "$(OK) nasm  $<"
 
 $(OBJS_DIR)/%.o: $(TESTS_DIR)/%.c | $(OBJS_DIR)
