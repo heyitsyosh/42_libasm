@@ -19,7 +19,7 @@ Then use any Makefile command.
 #### Makefile Commands:
 ```Java
 make        //compile library (to libasm.a)
-make test   //
+make test   //compile test
 make clean  //delete .o
 make fclean //delete .o and .a
 make re     //delete .o and .a and recompile library
