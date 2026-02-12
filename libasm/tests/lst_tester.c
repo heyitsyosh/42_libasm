@@ -60,14 +60,14 @@ static void	check(const char *desc, t_list *input, t_list *result, t_list *expec
 {
 	int	ok = lists_equal(result, expected);
 
-	printf("%s  %s\n", ok ? PASS_TAG : FAIL_TAG, desc);
-	printf(GRAY "input    : ");
+	printf("%s %s\n", ok ? PASS_TAG : FAIL_TAG, desc);
+	printf(GRAY "input   : ");
 	print_list(input);
-	printf("result   : ");
+	printf("result  : ");
 	print_list(result);
 	if (!ok)
 	{
-		printf("expected : ");
+		printf("actual  : ");
 		print_list(expected);
 	}
 	printf(RESET);
@@ -77,12 +77,12 @@ static void	check_size(const char *desc, t_list *input, int result, int expected
 {
 	int	ok = (result == expected);
 
-	printf("%s  %s\n", ok ? PASS_TAG : FAIL_TAG, desc);
-	printf(GRAY "input    : ");
+	printf("%s %s\n", ok ? PASS_TAG : FAIL_TAG, desc);
+	printf(GRAY "input   : ");
 	print_list(input);
-	printf("result   : %d\n", result);
+	printf("result  : %d\n", result);
 	if (!ok)
-		printf("expected : %d\n", expected);
+		printf("actual  : %d\n", expected);
 	printf(RESET);
 }
 
@@ -153,6 +153,99 @@ static void	test_list_size(void)
 	free_list(list);
 }
 
+/* ── ft_list_remove_if ────────────────────────────────────────── */
+
+static int	cmp_str(void *a, void *b)
+{
+	char *s1 = (char *)a;
+	char *s2 = (char *)b;
+	
+	if (!s1 && !s2)
+		return (0);
+	if (!s1 || !s2)
+		return (1);
+	while (*s1 && *s2 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
+}
+
+static void	test_list_remove_if(void)
+{
+	printf("\n--- ft_list_remove_if ---\n");
+
+	t_list	*head;
+	t_list	*input;
+
+	/* null guard */
+	ft_list_remove_if(NULL, "x", cmp_str, NULL);
+	printf("%s  NULL head pointer (no crash)\n", PASS_TAG);
+
+	/* remove single matching element */
+	head = make_node("a", make_node("b", make_node("c", NULL)));
+	input = make_node("a", make_node("b", make_node("c", NULL)));
+	ft_list_remove_if(&head, "b", cmp_str, NULL);
+	t_list *expected = make_node("a", make_node("c", NULL));
+	check("remove middle element\ntarget  : \"b\"", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* remove head */
+	head = make_node("a", make_node("b", make_node("c", NULL)));
+	input = make_node("a", make_node("b", make_node("c", NULL)));
+	ft_list_remove_if(&head, "a", cmp_str, NULL);
+	expected = make_node("b", make_node("c", NULL));
+	check("remove head element\ntarget  : \"a\"", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* remove tail */
+	head = make_node("a", make_node("b", make_node("c", NULL)));
+	input = make_node("a", make_node("b", make_node("c", NULL)));
+	ft_list_remove_if(&head, "c", cmp_str, NULL);
+	expected = make_node("a", make_node("b", NULL));
+	check("remove tail element\ntarget  : \"c\"", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* remove multiple matches */
+	head = make_node("a", make_node("b", make_node("a", make_node("a", NULL))));
+	input = make_node("a", make_node("b", make_node("a", make_node("a", NULL))));
+	ft_list_remove_if(&head, "a", cmp_str, NULL);
+	expected = make_node("b", NULL);
+	check("remove multiple matching elements\ntarget  : \"a\"", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* remove all elements */
+	head = make_node("x", make_node("x", make_node("x", NULL)));
+	input = make_node("x", make_node("x", make_node("x", NULL)));
+	ft_list_remove_if(&head, "x", cmp_str, NULL);
+	check("remove all elements\ntarget  : \"x\"", input, head, NULL);
+	free_list(input);
+
+	/* no match found */
+	head = make_node("a", make_node("b", make_node("c", NULL)));
+	input = make_node("a", make_node("b", make_node("c", NULL)));
+	ft_list_remove_if(&head, "42", cmp_str, NULL);
+	expected = make_node("a", make_node("b", make_node("c", NULL)));
+	check("no match found\ntarget  : \"42\"", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* empty list */
+	head = NULL;
+	ft_list_remove_if(&head, "x", cmp_str, NULL);
+	check("empty list\ntarget  : \"x\"", NULL, head, NULL);
+}
+
 /* ── entry point ──────────────────────────────────────────────── */
 
 void	run_lst_tests(void)
@@ -164,5 +257,5 @@ void	run_lst_tests(void)
 	test_list_push_front();
 	test_list_size();
 	// test_list_sort();
-	// test_list_remove_if();
+	test_list_remove_if();
 }
