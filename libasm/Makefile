@@ -7,6 +7,7 @@ OBJS_DIR = objs
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
+# -g3 -fsanitize=address
 
 NASM = nasm
 NASMFLAGS = -f elf64
@@ -22,9 +23,9 @@ SRCS =	ft_strlen\
 		ft_strdup\
 		ft_atoi_base\
 		ft_list_push_front\
-		ft_list_size
-# 		ft_list_sort\
-# 		ft_list_remove_if
+		ft_list_size\
+		ft_list_remove_if
+# 		ft_list_sort
 
 TEST_SRCS = tester stdlib_tester atoi_tester lst_tester
 
