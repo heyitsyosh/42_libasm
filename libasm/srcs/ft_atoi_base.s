@@ -24,7 +24,7 @@ section .text
 ;         or 0 if the input or base is invalid.
 ft_atoi_base:
 	test rdi, rdi
-	jz .error_end		; Null guard base string
+	jz .error_end		; Null guard input string
 	test rsi, rsi
 	jz .error_end		; Null guard base string
 	xor r8d, r8d		; i = 0
