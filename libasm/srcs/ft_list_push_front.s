@@ -23,7 +23,7 @@ section .text
 ;    None.
 ft_list_push_front:
 	test rdi, rdi
-	jz .end					; Null guard list head
+	jz .end					; if (!head) return
 
 	push rdi
 	push rsi

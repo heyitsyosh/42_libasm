@@ -27,9 +27,9 @@ section .text
 ; Return value:
 ;    None.
 ft_list_remove_if:
-	test rdi, rdi	; Null guard list head
+	test rdi, rdi	; if (!head) return
 	jz .end
-	test rdx, rdx	; Null guard comparison function
+	test rdx, rdx	; if (!cmp) return
 	jz .end
 
 	push rbx		; Save original state of callee-saved registers
