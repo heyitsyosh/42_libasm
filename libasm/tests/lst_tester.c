@@ -153,6 +153,125 @@ static void	test_list_size(void)
 	free_list(list);
 }
 
+/* ── ft_list_sort ─────────────────────────────────────────────── */
+
+static int	cmp_str_ascending(void *a, void *b)
+{
+	char *s1 = (char *)a;
+	char *s2 = (char *)b;
+	
+	if (!s1 && !s2)
+		return (0);
+	if (!s1)
+		return (-1);
+	if (!s2)
+		return (1);
+	while (*s1 && *s2 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
+}
+
+static void	test_list_sort(void)
+{
+	printf("\n--- ft_list_sort ---\n");
+
+	t_list	*head;
+	t_list	*input;
+	t_list	*expected;
+
+	/* null guard */
+	ft_list_sort(NULL, cmp_str_ascending);
+	printf("%s  NULL head pointer (no crash)\n", PASS_TAG);
+
+	/* empty list */
+	head = NULL;
+	ft_list_sort(&head, cmp_str_ascending);
+	check("empty list", NULL, head, NULL);
+
+	/* single element */
+	head = make_node("a", NULL);
+	input = make_node("a", NULL);
+	ft_list_sort(&head, cmp_str_ascending);
+	expected = make_node("a", NULL);
+	check("single element", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* already sorted */
+	head = make_node("a", make_node("b", make_node("c", NULL)));
+	input = make_node("a", make_node("b", make_node("c", NULL)));
+	ft_list_sort(&head, cmp_str_ascending);
+	expected = make_node("a", make_node("b", make_node("c", NULL)));
+	check("already sorted", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* reverse order */
+	head = make_node("c", make_node("b", make_node("a", NULL)));
+	input = make_node("c", make_node("b", make_node("a", NULL)));
+	ft_list_sort(&head, cmp_str_ascending);
+	expected = make_node("a", make_node("b", make_node("c", NULL)));
+	check("reverse order", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* mixed order */
+	head = make_node("dog", make_node("apple", make_node("zebra", make_node("cat", NULL))));
+	input = make_node("dog", make_node("apple", make_node("zebra", make_node("cat", NULL))));
+	ft_list_sort(&head, cmp_str_ascending);
+	expected = make_node("apple", make_node("cat", make_node("dog", make_node("zebra", NULL))));
+	check("mixed order", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* duplicates */
+	head = make_node("b", make_node("a", make_node("b", make_node("a", NULL))));
+	input = make_node("b", make_node("a", make_node("b", make_node("a", NULL))));
+	ft_list_sort(&head, cmp_str_ascending);
+	expected = make_node("a", make_node("a", make_node("b", make_node("b", NULL))));
+	check("duplicates", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* two elements - swap needed */
+	head = make_node("z", make_node("a", NULL));
+	input = make_node("z", make_node("a", NULL));
+	ft_list_sort(&head, cmp_str_ascending);
+	expected = make_node("a", make_node("z", NULL));
+	check("two elements needing swap", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* two elements - already sorted */
+	head = make_node("a", make_node("z", NULL));
+	input = make_node("a", make_node("z", NULL));
+	ft_list_sort(&head, cmp_str_ascending);
+	expected = make_node("a", make_node("z", NULL));
+	check("two elements already sorted", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+
+	/* long list - 12 elements mixed order */
+	head = make_node("12", make_node("3", make_node("7", make_node("1", make_node("9", make_node("5", make_node("11", make_node("2", make_node("8", make_node("4", make_node("10", make_node("6", NULL))))))))))));
+	input = make_node("12", make_node("3", make_node("7", make_node("1", make_node("9", make_node("5", make_node("11", make_node("2", make_node("8", make_node("4", make_node("10", make_node("6", NULL))))))))))));
+	ft_list_sort(&head, cmp_str_ascending);
+	expected = make_node("1", make_node("10", make_node("11", make_node("12", make_node("2", make_node("3", make_node("4", make_node("5", make_node("6", make_node("7", make_node("8", make_node("9", NULL))))))))))));
+	check("12 elements mixed order", input, head, expected);
+	free_list(head);
+	free_list(expected);
+	free_list(input);
+}
+
 /* ── ft_list_remove_if ────────────────────────────────────────── */
 
 static int	cmp_str(void *a, void *b)
@@ -256,6 +375,6 @@ void	run_lst_tests(void)
 
 	test_list_push_front();
 	test_list_size();
-	// test_list_sort();
+	test_list_sort();
 	test_list_remove_if();
 }
