@@ -3,9 +3,9 @@ global ft_list_sort
 extern ft_list_size
 
 %define HEAD_PP 8
-%define LEFT_NODE 16
-%define RIGHT_NODE 24
-%define CMP_FUNC 32
+%define CMP_FUNC 16
+%define LEFT_NODE 24
+%define RIGHT_NODE 32
 
 %include "structs.inc"
 
