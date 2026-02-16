@@ -19,7 +19,7 @@ section .text
 ;    rax: Pointer to the newly allocated duplicate string
 ;         (NULL if memory allocation fails)
 ft_strdup:
-	push rdi		; Save s in stack and align stack to 16-byte
+	push rdi
 	call ft_strlen
 	inc rax			; Increment len to allocate '\0'
 
@@ -35,6 +35,6 @@ ft_strdup:
 	ret
 
 .error_handle:
-	add rsp, 8		; Discard pushed s
+	pop rdi
 	xor eax, eax
 	ret
