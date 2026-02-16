@@ -2,8 +2,10 @@ global ft_list_sort
 
 extern ft_list_size
 
-%define LEFT_NODE   0
-%define RIGHT_NODE  8
+%define HEAD_PP 8
+%define LEFT_NODE 16
+%define RIGHT_NODE 24
+%define CMP_FUNC 32
 
 %include "structs.inc"
 
@@ -25,21 +27,16 @@ ft_list_sort:
 	jz .end				; if (!head) return
 	test rsi, rsi
 	jz .end				; if (!cmp) return
-
-	push r12
-	mov r12, rsi		; r12 = cmp
-
 	mov rcx, [rdi]
-	push rdi			; Save t_list **head
-
 	test rcx, rcx
-	jz .restore
+	jz .end				; if (!*head) return
 	cmp qword [rcx + t_list.next], 0
-	jz .restore
+	jz .end
 
-	; Allocate for left, right head pointers. Padding for 16-byte alignment.
-	sub rsp, 24
-	mov [rsp + LEFT_NODE], rcx ; Save left node
+	enter 32, 0
+	mov [rbp - HEAD_PP], rdi
+	mov [rbp - CMP_FUNC], rsi
+	mov [rbp - LEFT_NODE], rcx ; Save left node
 
 	mov rdi, rcx
 	call ft_list_size
@@ -49,7 +46,7 @@ ft_list_sort:
 
 	xor edx, edx				; edx = i
 	xor ecx, ecx				; ecx = previous node
-	mov r8, [rsp + LEFT_NODE]	; r8 = current node
+	mov r8, [rbp - LEFT_NODE]	; r8 = current node
 .loop_to_middle_node:
 	cmp edx, eax
 	je .unlink_nodes
@@ -59,30 +56,29 @@ ft_list_sort:
 	inc edx
 	jmp .loop_to_middle_node
 .unlink_nodes:
-	mov [rsp + RIGHT_NODE], r8			; Save right node
+	mov [rbp - RIGHT_NODE], r8			; Save right node
 	mov qword [rcx + t_list.next], 0	; Split!
 
 .divide:
-	lea rdi, [rsp + LEFT_NODE]
-	mov rsi, r12
+	lea rdi, [rbp - LEFT_NODE]
+	mov rsi, [rbp - CMP_FUNC]
 	call ft_list_sort	; Recursively divide left side
 
-	lea rdi, [rsp + RIGHT_NODE]
-	mov rsi, r12
+	lea rdi, [rbp - RIGHT_NODE]
+	mov rsi, [rbp - CMP_FUNC]
 	call ft_list_sort	; Recursively divide right side
 
 ; Recursive calls returned. Sublists have been sorted.
-	mov rdi, [rsp + LEFT_NODE]
-	mov rsi, [rsp + RIGHT_NODE]
-	mov rdx, r12
+	mov rdi, [rbp - LEFT_NODE]
+	mov rsi, [rbp - RIGHT_NODE]
+	mov rdx, [rbp - CMP_FUNC]
 	call merge			; t_list *merge(t_list *left, t_list *right, int *cmp())
 .merge_done:
-	mov rdx, [rsp + 24]
-	mov [rdx], rax 		; Update double pointer to head
-	add rsp, 24
+	mov rdi, [rbp - HEAD_PP]
+	mov [rdi], rax 		; *head = merged_head
+
 .restore:
-	pop rdi
-	pop r12
+	leave
 .end:
 	ret
 
