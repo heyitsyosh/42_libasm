@@ -49,7 +49,7 @@ gcc main.c ./libasm/libasm.a
 | Function | Description |
 | ---------- | ----------- |
 | [**ft_atoi_base**](url) | Converts a string to an integer in a specified base. |
-| [**ft_list_push_front**](url) | Adds an element at the beginning of a list. |
+| [**ft_list_push_front**](url) | Adds an element at the beginning of a linked list. |
 | [**ft_list_size**](url) | Returns the number of nodes in a linked list. |
-| [**ft_list_sort**](url) | Sorts list elements from smallest to largest. |
-| [**ft_list_remove_if**](url) | Frees and removes list elements for which cmp(data, data_ref) == 0. |
+| [**ft_list_sort**](url) | Sorts a linked list from smallest to largest. |
+| [**ft_list_remove_if**](url) | Frees and removes elements in a linked list for which cmp(data, data_ref) == 0. |
