@@ -33,8 +33,8 @@ ft_list_push_front:
 	add rsp, 8
 	pop rsi
 	pop rdi
-	test rax, rax			; Check if malloc failed
-	jz .end					; End function if malloc failed
+	test rax, rax
+	jz .end					; if malloc failed, return
 	mov [rax + t_list.data], rsi
 	mov rdx, [rdi]
 	mov [rax + t_list.next], rdx
