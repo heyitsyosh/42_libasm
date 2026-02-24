@@ -34,8 +34,8 @@ TEST_OBJS = $(addprefix $(OBJS_DIR)/, $(addsuffix .o,$(TEST_SRCS)))
 
 # ----------------- Formatting ------------------
 
-OK     = \033[32m✓\033[0m
-DEL    = \033[31m✗\033[0m
+OK	= \033[32m✓\033[0m
+DEL	= \033[31m✗\033[0m
 
 # ------------------- Rules --------------------
 all: $(NAME)
