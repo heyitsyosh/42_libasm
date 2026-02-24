@@ -30,11 +30,11 @@ ft_strdup:
 
 	mov rdi, rax	; Set dest
 	mov rsi, [rsp]	; Set src
-	call ft_strcpy	; ft_strlcpy(dest, src)
-	add rsp, 8		; Discard pushed s
-	ret
+	call ft_strcpy	; ft_strcpy(dest, src)
+	jmp .end
 
 .error_handle:
-	pop rdi
 	xor eax, eax
+.end:
+	add rsp, 8		; Discard pushed s
 	ret
