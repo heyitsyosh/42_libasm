@@ -65,12 +65,12 @@ $(TEST): $(NAME) $(TEST_OBJS)
 
 clean:
 	@$(RM) -r $(OBJS_DIR)
-	@echo "$(DEL) $(RM) $(OBJS_DIR) deleted"
+	@echo "$(DEL) $(RM) $(OBJS_DIR)/ deleted"
 
 fclean: clean
 	@$(RM) $(NAME) $(TEST)
 	@echo "$(DEL) $(RM) $(NAME) deleted"
-	@echo "$(DEL) $(RM) tests deleted"
+	@echo "$(DEL) $(RM) $(TEST) deleted"
 
 re: fclean all
 
