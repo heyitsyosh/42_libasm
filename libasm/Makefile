@@ -65,7 +65,7 @@ $(TEST): $(NAME) $(TEST_OBJS)
 
 clean:
 	@$(RM) -r $(OBJS_DIR)
-	@echo "$(DEL) $(RM) $(OBJS_DIR)/ deleted"
+	@echo "$(DEL) rm -r $(OBJS_DIR)/"
 
 fclean: clean
 	@$(RM) $(NAME) $(TEST)
