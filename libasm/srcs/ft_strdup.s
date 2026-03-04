@@ -34,6 +34,8 @@ ft_strdup:
 	jmp .end
 
 .error_handle:
+	call __errno_location wrt ..plt
+	mov dword [rax], 12	; ENOMEM (linux)
 	xor eax, eax
 .end:
 	add rsp, 8		; Discard pushed s
