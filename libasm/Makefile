@@ -1,43 +1,45 @@
-NAME = libasm.a
-TEST = libasm-tester
+NAME := libasm.a
+TEST := libasm-tester
 
-SRCS_DIR = srcs
-TESTS_DIR = tests
-OBJS_DIR = objs
-
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CC := gcc
+CFLAGS := -Wall -Wextra -Werror
 # -g3 -fsanitize=address
 
-NASM = nasm
-NASMFLAGS = -f elf64
+NASM := nasm
+NASMFLAGS := -f elf64
 
-INCLUDES = -I ./includes/
-NASM_INCLUDES = -I ./srcs
+INCLUDES := -I ./includes/
+NASM_INCLUDES := -I ./srcs
 
-SRCS =	ft_strlen\
-		ft_strcpy\
-		ft_strcmp\
-		ft_read\
-		ft_write\
-		ft_strdup\
-		ft_atoi_base\
-		ft_list_push_front\
-		ft_list_size\
-		ft_list_sort\
-		ft_list_remove_if
+SRCS_DIR := srcs
+TESTS_DIR := tests
+OBJS_DIR := objs
 
-TEST_SRCS = tester stdlib_tester atoi_tester lst_tester
+SRCS := ft_strlen \
+        ft_strcpy \
+        ft_strcmp \
+        ft_read \
+        ft_write \
+        ft_strdup \
+        ft_atoi_base \
+        ft_list_push_front \
+        ft_list_size \
+        ft_list_sort \
+        ft_list_remove_if
 
-OBJS = $(addprefix $(OBJS_DIR)/, $(addsuffix .o,$(SRCS)))
-TEST_OBJS = $(addprefix $(OBJS_DIR)/, $(addsuffix .o,$(TEST_SRCS)))
+TEST_SRCS := tester \
+            stdlib_tester \
+            atoi_tester \
+            lst_tester
 
-# ----------------- Formatting ------------------
+OBJS := $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(SRCS)))
+TEST_OBJS := $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(TEST_SRCS)))
 
-OK	= \033[32m✓\033[0m
-DEL	= \033[31m✗\033[0m
+OK  := \033[32m✓\033[0m
+DEL := \033[31m✗\033[0m
 
-# ------------------- Rules --------------------
+# **************************************************************************** #
+
 all: $(NAME)
 
 $(OBJS_DIR):
