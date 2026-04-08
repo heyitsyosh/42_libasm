@@ -27,22 +27,22 @@ section .text
 ; Return value:
 ;    None.
 ft_list_remove_if:
-	test rdi, rdi	; if (!head) return
+	test rdi, rdi   ; if (!head) return
 	jz .end
-	test rdx, rdx	; if (!cmp) return
+	test rdx, rdx   ; if (!cmp) return
 	jz .end
 
-	push rbx		; Save original state of callee-saved registers
+	push rbx        ; Save original state of callee-saved registers
 	push NEXT
 	push PREV
 
 	xor PREV, PREV
-	mov rbx, [rdi]	; Dereference list head
+	mov rbx, [rdi]  ; Dereference list head
 .loop:
 	test rbx, rbx
-	jz .restore		; No node
+	jz .restore     ; No node
 
-	push rdi		; Save parameters
+	push rdi        ; Save parameters
 	push rsi
 	push rdx
 	push rcx
@@ -50,7 +50,7 @@ ft_list_remove_if:
 	mov rdi, [rbx + t_list.data]
 	call rdx
 
-	pop rcx			; Restore parameters
+	pop rcx         ; Restore parameters
 	pop rdx
 	pop rsi
 	pop rdi
@@ -63,7 +63,7 @@ ft_list_remove_if:
 	jmp .loop
 .remove_node:
 	mov NEXT, [rbx + t_list.next]
-	push rdi		; Save parameters
+	push rdi        ; Save parameters
 	push rsi
 	push rdx
 	push rcx
@@ -77,7 +77,7 @@ ft_list_remove_if:
 	mov rdi, rbx
 	call free wrt ..plt
 
-	pop rcx			; Restore parameters
+	pop rcx         ; Restore parameters
 	pop rdx
 	pop rsi
 	pop rdi

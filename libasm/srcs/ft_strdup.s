@@ -21,22 +21,22 @@ section .text
 ft_strdup:
 	push rdi
 	call ft_strlen
-	inc rax			; Increment len to allocate '\0'
+	inc rax         ; Increment len to allocate '\0'
 
 	mov rdi, rax
 	call malloc wrt ..plt
 	test rax, rax
 	jz .error_handle
 
-	mov rdi, rax	; Set dest
-	mov rsi, [rsp]	; Set src
-	call ft_strcpy	; ft_strcpy(dest, src)
+	mov rdi, rax    ; Set dest
+	mov rsi, [rsp]  ; Set src
+	call ft_strcpy  ; ft_strcpy(dest, src)
 	jmp .end
 
 .error_handle:
 	call __errno_location wrt ..plt
-	mov dword [rax], 12	; ENOMEM (linux)
+	mov dword [rax], 12 ; ENOMEM (linux)
 	xor eax, eax
 .end:
-	add rsp, 8		; Discard pushed s
+	add rsp, 8      ; Discard pushed s
 	ret
